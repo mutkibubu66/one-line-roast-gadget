@@ -11,7 +11,12 @@ import { join } from "node:path";
 const LINE =
   "My smartwatch buzzes to congratulate me for standing up, as if sitting was the hard part.";
 
-const botDir = process.env.MAKEFUN_BOT_DIR ?? ".";
+// The gate allows 1–200 characters: refuse to write an over-long line
+// rather than submit an entry the gate would reject.
+if (LINE.length < 1 || LINE.length > 200) {
+  throw new Error(`roast line is ${LINE.length} characters, gate allows 1–200`);
+}
+
 const outputDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
 
 mkdirSync(outputDir, { recursive: true });
